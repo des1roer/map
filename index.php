@@ -1,28 +1,107 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Map</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
-          integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
-          crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
-            integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
-            crossorigin=""></script>
-
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
-            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.min.js"></script>
-    <link rel="icon" href="http://faviconka.ru/ico/faviconka_ru_842.png" type="image/x-icon"/>
-    <!--<script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
-    <link rel="stylesheet" type="text/css" href="css/style.css" media="screen"/>
+    <title>Leaflet</title>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"/>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
 </head>
 <body>
-<div id="mapid"></div>
+<div style="width:500px; height:500px" id="map"></div>
 
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.2/vue.min.js"></script> -->
- <script src="js/script.js?1.0"></script>
+<script type='text/javascript'>
+
+  //set up styles & data
+
+  var highlightStyle = {
+    weight: 3,
+    color: '#3B555C',
+    dashArray: '',
+    fillOpacity: 0.6
+  }
+
+  var states = [{
+    "type": "Feature",
+    "properties": {"party": "Republican"},
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [[
+        [-104.05, 48.99],
+        [-97.22, 48.98],
+        [-96.58, 45.94],
+        [-104.03, 45.94],
+        [-104.05, 48.99]
+      ]]
+    }
+  }, {
+    "type": "Feature",
+    "properties": {"party": "Democrat"},
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [[
+        [-109.05, 41.00],
+        [-102.06, 40.99],
+        [-102.03, 36.99],
+        [-109.04, 36.99],
+        [-109.05, 41.00]
+      ]]
+    }
+  }];
+
+  //define map
+  var map = new L.map("map").setView([40.1, -100], 4);
+
+  map.removeLayer('map')
+
+  //set up layer events
+  function zoomToFeature(evt) {
+    fitBounds(evt.target.getBounds());
+  }
+
+  function fitBounds(bounds) {
+    map.fitBounds(bounds);
+  }
+
+  function highlightFeature(evt) {
+    var feature = evt.target;
+    feature.setStyle(highlightStyle);
+    if (!L.Browser.ie && !L.Browser.opera) {
+      feature.bringToFront();
+    }
+  }
+
+  function resetHighlight(evt) {
+    statesLayer.resetStyle(evt.target);
+  }
+
+
+  function popUpFeature(feature, layer) {
+    var popupText = "Yo, I'm a <b>" + feature.properties.party + "</b> y'all!<br>";
+    layer.bindPopup(popupText);
+  }
+
+  //set up the feature iteration
+  var onEachFeature = function (feature, layer) {
+    popUpFeature(feature, layer);
+    layer.on({
+      mouseover: highlightFeature,
+      mouseout: resetHighlight,
+      click: zoomToFeature
+    });
+  }
+
+  //add the stae layer
+  statesLayer = L.geoJson(states, {
+    style: function (feature) {
+      switch (feature.properties.party) {
+        case 'Republican':
+          return {color: "#ff0000"};
+        case 'Democrat':
+          return {color: "#0000ff"};
+      }
+    },
+    onEachFeature: onEachFeature,
+  }).addTo(map);
+
+</script>
+</body>
 </html>
-
