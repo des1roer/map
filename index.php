@@ -6,7 +6,7 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
 </head>
 <body>
-<div style="width:500px; height:500px" id="map"></div>
+<div style="height:500px" id="map"></div>
 
 <script type='text/javascript'>
 
@@ -21,7 +21,10 @@
 
   var states = [{
     "type": "Feature",
-    "properties": {"party": "Republican"},
+    "properties": {
+      "party": "Republican",
+      'atata': 'dsfsdds'
+    },
     "geometry": {
       "type": "Polygon",
       "coordinates": [[
@@ -34,7 +37,10 @@
     }
   }, {
     "type": "Feature",
-    "properties": {"party": "Democrat"},
+    "properties": {
+      "party": "Democrat",
+      'atata': 'dsfsd'
+    },
     "geometry": {
       "type": "Polygon",
       "coordinates": [[
@@ -73,7 +79,6 @@
     statesLayer.resetStyle(evt.target);
   }
 
-
   function popUpFeature(feature, layer) {
     var popupText = "Yo, I'm a <b>" + feature.properties.party + "</b> y'all!<br>";
     layer.bindPopup(popupText);
@@ -92,6 +97,7 @@
   //add the stae layer
   statesLayer = L.geoJson(states, {
     style: function (feature) {
+      console.log(feature.properties.atata)
       switch (feature.properties.party) {
         case 'Republican':
           return {color: "#ff0000"};
