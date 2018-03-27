@@ -4,7 +4,9 @@ var polygon = L.polygon([
   [51.509, -0.08],
   [51.503, -0.06],
   [51.51, -0.047]
-]).addTo(mymap).on('click', onMapClick);
+]).addTo(mymap)
+  .on('click', onMapClick)
+  .on('mouseover', onMapClick);
 
 var polygon2 = L.polygon([
   [51.509, -0.2],
@@ -19,7 +21,14 @@ var popup = L.popup()
   .openOn(mymap);
 
 function onMapClick(e) {
-  alert("You clicked the map at " + e.latlng);
+  // event.target.style.color = '#0000FF';
+  // console.log($(event.target));
+  polygon.setStyle({fillColor: '#0000FF'});
+  // $(event.target).fillStyle="#FF0000";
+  // console.log(event.target.style.color = '#0000FF')
+  //event.target.setStyle({fillColor: '#0000FF'});
+  
+  // alert("You clicked the map at " + e.latlng);
 }
 
 // mymap.on('click', onMapClick);
