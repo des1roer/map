@@ -28,11 +28,10 @@
     "geometry": {
       "type": "Polygon",
       "coordinates": [[
-        [-104.05, 48.99],
-        [-97.22, 48.98],
-        [-96.58, 45.94],
-        [-104.03, 45.94],
-        [-104.05, 48.99]
+        [10, 20],
+        [10, 30],
+        [30, 30],
+        [30, 20],
       ]]
     }
   }, {
@@ -44,17 +43,16 @@
     "geometry": {
       "type": "Polygon",
       "coordinates": [[
-        [-109.05, 41.00],
-        [-102.06, 40.99],
-        [-102.03, 36.99],
-        [-109.04, 36.99],
-        [-109.05, 41.00]
+        [0, 10],
+        [0, 20],
+        [20, 20],
+        [20, 10],
       ]]
     }
   }];
 
   //define map
-  var map = new L.map("map").setView([40.1, -100], 4);
+  var map = new L.map("map").setView([0, 0], 4);
 
   map.removeLayer('map')
 
@@ -66,9 +64,16 @@
   function fitBounds(bounds) {
     map.fitBounds(bounds);
   }
+  function onMapClick(e) {
+    alert("You clicked the map at " + e.latlng);
+  }
+  function onMapClick2(e) {
+    console.log(e.latlng)
+  }
 
   function highlightFeature(evt) {
     var feature = evt.target;
+    console.log(evt.latlng);
     feature.setStyle(highlightStyle);
     if (!L.Browser.ie && !L.Browser.opera) {
       feature.bringToFront();
@@ -86,11 +91,12 @@
 
   //set up the feature iteration
   var onEachFeature = function (feature, layer) {
-    popUpFeature(feature, layer);
+    // popUpFeature(feature, layer);
     layer.on({
       mouseover: highlightFeature,
       mouseout: resetHighlight,
-      click: zoomToFeature
+      click: onMapClick,
+      mousemove: onMapClick2,
     });
   }
 
