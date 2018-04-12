@@ -82,6 +82,9 @@
 
     states[states.length] = getTile(states.length);
     console.log(states)
+    map.eachLayer(function (layer) {
+      map.removeLayer(layer);
+    });
 
     L.geoJson(states, {
       style: function (feature) {
