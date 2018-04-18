@@ -14,7 +14,7 @@
 <script type='text/javascript'>
   var map = L.map('map', {
     center: [0, 0],
-    zoom: 17
+    zoom: 5
   });
   var states = [];
   // [{
@@ -41,7 +41,33 @@
   };
 
   function getTile(i) {
-    var len = 0.001;
+    var len = 1;
+    return {
+      "type": "Feature",
+      "properties": {
+        "party": "Democrat",
+        'atata': 'dsfsd'
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          // [i * len, i * len].reverse(),
+          // [i * len + len, i * len].reverse(),
+          // [i * len + len, i * len + 2 * (len)].reverse(),
+          // [i * len, i * len + 2 * (len)].reverse(),
+          // вправо
+          [0 * len,  i * 2 * len ].reverse(), // левый нижний
+          [0 * len + len, i * 2 * len ].reverse(), // левый верхний
+          [0 * len + len, 0 * len + 2 * (len) + i * 2 * len ].reverse(),
+          [0 * len, 0 * len + 2 * (len) + i * 2 * len ].reverse(),
+          //
+        ]]
+      }
+    };
+  }
+
+  function getTile2(i) {
+    var len = 1;
     return {
       "type": "Feature",
       "properties": {
@@ -55,6 +81,12 @@
           [i * len + len, i * len].reverse(),
           [i * len + len, i * len + 2 * (len)].reverse(),
           [i * len, i * len + 2 * (len)].reverse(),
+          // вправо
+          // [0 * len,  i * 2 * len ].reverse(), // левый нижний
+          // [0 * len + len, i * 2 * len ].reverse(), // левый верхний
+          // [0 * len + len, 0 * len + 2 * (len) + i * 2 * len ].reverse(),
+          // [0 * len, 0 * len + 2 * (len) + i * 2 * len ].reverse(),
+          //
         ]]
       }
     };
@@ -81,6 +113,7 @@
   function onMapClick(e) {
 
     states[states.length] = getTile(states.length);
+    states[states.length] = getTile2(states.length);
     console.log(states)
     map.eachLayer(function (layer) {
       map.removeLayer(layer);
